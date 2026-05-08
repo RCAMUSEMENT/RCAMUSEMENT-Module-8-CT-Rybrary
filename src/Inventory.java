@@ -71,6 +71,7 @@ public class Inventory {
         File file = new File(DATA_FILE);
         if (!file.exists()) return;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
+            @SuppressWarnings("unchecked")
             Map<String, Map<Integer, Book>> data = (Map<String, Map<Integer, Book>>) ois.readObject();
             mainInventory = data.getOrDefault("main", new HashMap<>());
             lendingInventory = data.getOrDefault("lending", new HashMap<>());

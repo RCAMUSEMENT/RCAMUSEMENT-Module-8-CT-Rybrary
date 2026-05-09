@@ -5,10 +5,11 @@ import javax.swing.*;
 public class RyleysLibrarySystem {
     private Inventory inventory = new Inventory();
     private JFrame frame;
-    private final Color MILITARY_BG = new Color(53, 66, 48);
-    private final Color MILITARY_BTN = new Color(75, 83, 32);
-    private final Color KHAKI = new Color(210, 210, 180);
-    private final Color TEXT_BLACK = Color.BLACK;
+    // Military Green Palette
+    private final Color MILITARY_BG = new Color(53, 66, 48); // Deep Forest Olive Green Color
+    private final Color MILITARY_BTN = new Color(75, 83, 32); // Olive Drab Green Color
+    private final Color KHAKI = new Color(210, 210, 180); // Faded Khaki Color
+    private final Color TEXT_BLACK = Color.BLACK; // Black for words to improve readability on the military background
 
     public RyleysLibrarySystem() {
         inventory.loadData();
@@ -17,18 +18,23 @@ public class RyleysLibrarySystem {
         frame.setSize(550, 450);
         frame.setLayout(new BorderLayout());
 
+        // Header Style: Background of text is Olive Green, Title Text is Khaki Color,
+        // and the font is Monospaced Bold to give it a much more technical and militaristic feel.
+        // The header also has some padding for better spacing.
         JLabel header = new JLabel("📚 RYLEY'S LIBRARY SYSTEM", SwingConstants.CENTER);
         header.setOpaque(true);
         header.setBackground(MILITARY_BG);
-        header.setForeground(KHAKI);
+        header.setForeground(KHAKI); // Title is Khaki in color
         header.setFont(new Font("Monospaced", Font.BOLD, 26));
         header.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         frame.add(header, BorderLayout.NORTH);
 
+        // Menu Panel Style
         JPanel menuPanel = new JPanel(new GridLayout(3, 2, 15, 15));
         menuPanel.setBackground(MILITARY_BG);
         menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 30, 30));
 
+        // Created Buttons with Black text
         JButton btnAdd = createStyledButton("➕ Add a Book");
         JButton btnBorrow = createStyledButton("📖 Borrow a Book");
         JButton btnReturn = createStyledButton("🔄 Return a Book");
@@ -36,6 +42,7 @@ public class RyleysLibrarySystem {
         JButton btnList = createStyledButton("📋 List All Books");
         JButton btnExit = createStyledButton("🚪 Save & Exit");
 
+        // My Logic Actions for each button
         btnAdd.addActionListener(e -> showAddDialog());
         btnBorrow.addActionListener(e -> showBorrowDialog());
         btnReturn.addActionListener(e -> showReturnDialog());
@@ -43,25 +50,45 @@ public class RyleysLibrarySystem {
         btnList.addActionListener(e -> showListPopup());
         btnExit.addActionListener(e -> {
             inventory.saveData();
-            JOptionPane.showMessageDialog(frame, "Congratulations! All the Books are Saved. Goodbye and Thank you for using Ryley's Digital Library! 👋"); 
+            JOptionPane.showMessageDialog(frame, "Archives Saved. Goodbye and Thank you for using Ryley's Digital Library! 👋");
             System.exit(0);
         });
 
-        menuPanel.add(btnAdd); menuPanel.add(btnBorrow);
-        menuPanel.add(btnReturn); menuPanel.add(btnSearch);
-        menuPanel.add(btnList); menuPanel.add(btnExit);
+        menuPanel.add(btnAdd);
+        menuPanel.add(btnBorrow);
+        menuPanel.add(btnReturn);
+        menuPanel.add(btnSearch);
+        menuPanel.add(btnList);
+        menuPanel.add(btnExit);
 
         frame.add(menuPanel, BorderLayout.CENTER);
         frame.getContentPane().setBackground(MILITARY_BG);
         frame.setLocationRelativeTo(null);
+
+        // Tactical Dynamic Scaling logic to match text to window size
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int headerSize = Math.max(18, frame.getWidth() / 20);
+                int buttonSize = Math.max(10, frame.getWidth() / 35);
+                header.setFont(new Font("Monospaced", Font.BOLD, headerSize));
+                for (Component c : menuPanel.getComponents()) {
+                    if (c instanceof JButton) {
+                        c.setFont(new Font("Monospaced", Font.BOLD, buttonSize));
+                    }
+                }
+            }
+        });
+
         frame.setVisible(true);
     }
 
+    // Button Styling: Khaki background with Black text To both fit my military theme and improve its overall readability
     private JButton createStyledButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Monospaced", Font.BOLD, 14));
-        btn.setBackground(KHAKI);
-        btn.setForeground(TEXT_BLACK);
+        btn.setBackground(KHAKI); // Buttons use a Khaki background
+        btn.setForeground(TEXT_BLACK); // Text is Black
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createLineBorder(MILITARY_BTN, 2));
 
@@ -126,7 +153,9 @@ public class RyleysLibrarySystem {
     }
 
     public static void main(String[] args) {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {}
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {}
         SwingUtilities.invokeLater(() -> new RyleysLibrarySystem());
     }
 }
